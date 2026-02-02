@@ -1,6 +1,8 @@
 import express, { Express } from "express";
 import pc from "picocolors";
+import swaggerUI from "swagger-ui-express";
 import db from "./config/db";
+import swaggerSpec from "./config/swagger";
 import productsRouter from "./router";
 
 //  Conectar a base de datos
@@ -16,14 +18,15 @@ export async function connectDB() {
 }
 
 connectDB();
-
+//  Instancia de express
 const server: Express = express();
+
+// Leer datos de formularios
 server.use(express.json());
 
 server.use("/api/products", productsRouter);
 
-server.get("/api", (req, res) => {
-  res.json({ msg: "Desde API" });
-});
+// Docs
+server.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 export default server;
