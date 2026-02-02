@@ -4,14 +4,14 @@ import db from "./config/db";
 import productsRouter from "./router";
 
 //  Conectar a base de datos
-async function connectDB() {
+export async function connectDB() {
   try {
     await db.authenticate();
-    db.sync();
+    await db.sync();
     // console.log(pc.green("✅ Base de datos sincronizada"));
   } catch (error) {
     // console.log(error);
-    // console.log(pc.bgRed(pc.white("❌ Hubo un error al conectar a la BD")));
+    console.log(pc.bgRed(pc.white("Hubo un error al conectar a la BD")));
   }
 }
 
