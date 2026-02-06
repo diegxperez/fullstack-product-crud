@@ -4,7 +4,7 @@ import Product from "../models/Product.model";
 export const getProducts = async (req: Request, res: Response) => {
   try {
     const products = await Product.findAll({
-      order: [["price", "DESC"]],
+      order: [["id", "DESC"]],
     });
     res.json({ data: products });
   } catch (error) {
@@ -62,7 +62,7 @@ export const updateAvailability = async (req: Request, res: Response) => {
   }
 
   // Actualizar
-  product.availability = product.dataValues.availability!;
+  product.availability = !product.dataValues.availability!;
   await product.save();
   res.json({ data: product });
 };

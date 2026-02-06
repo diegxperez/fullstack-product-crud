@@ -1,3 +1,5 @@
+import cors, { CorsOptions } from "cors";
+import morgan from "morgan";
 import express, { Express } from "express";
 import pc from "picocolors";
 import swaggerUI from "swagger-ui-express";
@@ -21,9 +23,27 @@ connectDB();
 //  Instancia de express
 const server: Express = express();
 
+// Permitir conexiones
+const corsOptions: CorsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = [process.env.FRONTEND_URL, "http://localhost:4000"];
+
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Error de CORS"));
+    }
+  },
+};
+
+server.use(cors(corsOptions));
 // Leer datos de formularios
 server.use(express.json());
-
+server.use(morgan("dev"));
 server.use("/api/products", productsRouter);
 
 // Docs
